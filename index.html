@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fernando Gtz — Software Engineer</title>
+  <link rel="icon" type="image/x-icon" href="assets/icon.ico">
+  <meta name="description" content="Portafolio de Fernando David Gómez Gutiérrez, Software Engineer orientado a backend y cloud.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="cursor-glow" aria-hidden="true"></div>
+  <canvas id="particles" class="particles" aria-hidden="true"></canvas>
+
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar__toggle" id="sidebarToggle" aria-label="Abrir menú" aria-expanded="false">
+      <i class="ri-menu-3-line"></i>
+    </button>
+    <nav class="sidebar__nav" aria-label="Navegación principal">
+      <ol class="sidebar__list">
+        <li class="sidebar__item active" data-section="about">
+          <span class="sidebar__number">01</span>
+          <span class="sidebar__label">Sobre mí</span>
+        </li>
+        <li class="sidebar__item" data-section="stack">
+          <span class="sidebar__number">02</span>
+          <span class="sidebar__label">Stack</span>
+        </li>
+        <li class="sidebar__item" data-section="experience">
+          <span class="sidebar__number">03</span>
+          <span class="sidebar__label">Experiencia</span>
+        </li>
+        <li class="sidebar__item" data-section="projects">
+          <span class="sidebar__number">04</span>
+          <span class="sidebar__label">Proyectos</span>
+        </li>
+        <li class="sidebar__item" data-section="certifications">
+          <span class="sidebar__number">05</span>
+          <span class="sidebar__label">Certificaciones</span>
+        </li>
+        <li class="sidebar__item" data-section="education">
+          <span class="sidebar__number">06</span>
+          <span class="sidebar__label">Educación</span>
+        </li>
+      </ol>
+    </nav>
+  </aside>
+
+  <main id="main">
+    <!-- ===================== 01 · ABOUT ===================== -->
+    <section id="about" class="section section--hero">
+      <div class="container">
+        <p class="hero__eyebrow reveal">Sobre mí</p>
+        <h1 class="hero__title reveal" style="--reveal-delay: 100ms">
+          Hola, soy <span class="hero__name">Fernando</span>.
+        </h1>
+        <p class="hero__subtitle reveal" style="--reveal-delay: 180ms">Software Engineer · Backend &amp; Cloud · AWS</p>
+        <p class="hero__bio reveal" style="--reveal-delay: 260ms">
+          Desarrollador de Software con orientación backend y cloud, enfocado en comprender
+          la arquitectura y estructura de las soluciones antes de implementarlas. Con
+          experiencia práctica diseñando sistemas distribuidos, aplicando criterio en la
+          integración de seguridad basada en identidad, componentes edge y módulos de
+          analítica de negocio.<br>
+          Me interesa más entender por qué una solución funciona que simplemente
+          implementarla. Ese criterio es lo que guía cada decisión de diseño.
+        </p>
+        <div class="hero__pills reveal" style="--reveal-delay: 340ms">
+          <span class="pill"><i class="ri-flashlight-fill pill__icon"></i> Backend Oriented</span>
+          <span class="pill"><i class="ri-cloud-fill pill__icon"></i> AWS Certified</span>
+          <span class="pill"><i class="ri-map-pin-2-fill pill__icon"></i> Morelia, Mich.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 · STACK ===================== -->
+    <section id="stack" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-head__index">02</span>
+          <h2 class="section-head__title">Stack</h2>
+        </header>
+
+        <div class="stack-orbit" id="stack-orbit" aria-label="Tecnologías agrupadas por categoría"></div>
+
+        <div class="stack-accordion" id="stack-accordion" aria-label="Stack tecnológico"></div>
+      </div>
+    </section>
+
+    <!-- ===================== 03 · EXPERIENCE ===================== -->
+    <section id="experience" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-head__index">03</span>
+          <h2 class="section-head__title">Experiencia</h2>
+        </header>
+
+        <div class="timeline">
+          <div class="timeline__entry reveal reveal--left">
+            <div class="timeline__marker">
+              <img src="assets/images/experience/logo-villalon.png" alt="Logo de Villalón Engineering">
+            </div>
+            <div class="timeline__content">
+              <h3 class="timeline__role">Desarrollador de Software — Prácticas Profesionales</h3>
+              <p class="timeline__company">Villalón Engineering</p>
+              <span class="timeline__period">Actualidad</span>
+              <ul class="timeline__bullets">
+                <li>Capacitación en Angular (v17) orientada a la migración de módulos del sistema VEX ERP hacia Angular v22.</li>
+                <li>Análisis de compatibilidad de módulos existentes con la versión objetivo del framework.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline__entry reveal reveal--left" style="--reveal-delay: 120ms">
+            <div class="timeline__marker">
+              <img src="assets/images/experience/logo-cel.png" alt="Logo del Centro de Lenguas UAEH">
+            </div>
+            <div class="timeline__content">
+              <h3 class="timeline__role">Desarrollador y Tester Jr. — Servicio Social</h3>
+              <p class="timeline__company">Centro de Lenguas — UAEH</p>
+              <span class="timeline__period">Enero – Mayo 2026</span>
+              <ul class="timeline__bullets">
+                <li>Apoyo en actividades de desarrollo y mantenimiento de software institucional.</li>
+                <li>Ejecución de pruebas funcionales y soporte técnico.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel reveal" aria-label="Galería de experiencia">
+          <div class="carousel__track" id="experience-carousel"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 04 · PROJECTS ===================== -->
+    <section id="projects" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-head__index">04</span>
+          <h2 class="section-head__title">Proyectos</h2>
+        </header>
+
+        <!-- BMG GYM SYSTEM -->
+        <article class="project-card project-card--bmg reveal" id="project-bmg" data-project="bmg">
+          <header class="project-card__header">
+            <div class="project-card__title-row">
+              <h3 class="project-card__title">BMG GYM SYSTEM</h3>
+              <span class="badge badge--amber"><span class="badge__dot"></span>En desarrollo</span>
+            </div>
+            <div class="project-card__meta">
+              <p class="project-card__subtitle">Sistema de administración empresarial multi-tier para gimnasios</p>
+            </div>
+            <div class="project-card__stack">
+              <span class="project-card__stack-pill">Java</span>
+              <span class="project-card__stack-pill">Spring Boot 3</span>
+              <span class="project-card__stack-pill">PostgreSQL</span>
+              <span class="project-card__stack-pill">Angular v20+</span>
+              <span class="project-card__stack-pill">JavaFX</span>
+              <span class="project-card__stack-pill">SQLite</span>
+              <span class="project-card__stack-pill">Railway</span>
+              <span class="project-card__stack-pill">S3</span>
+            </div>
+          </header>
+          <div class="tabs" role="tablist" aria-label="Secciones del proyecto BMG">
+            <button class="tab active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
+            <button class="tab" data-tab="auth" role="tab" aria-selected="false">Auth &amp; Security</button>
+            <button class="tab" data-tab="edge" role="tab" aria-selected="false">Edge &amp; Sync</button>
+            <button class="tab" data-tab="analytics" role="tab" aria-selected="false">Analytics &amp; BI</button>
+          </div>
+          <div class="project-card__body" id="bmg-body"></div>
+        </article>
+
+        <!-- ANTROPOS -->
+        <article class="project-card project-card--antropos reveal" id="project-antropos" data-project="antropos">
+          <header class="project-card__header">
+            <div class="project-card__title-row">
+              <h3 class="project-card__title">ANTROPOS — Museo Virtual del Cuerpo Humano</h3>
+              <span class="badge badge--neutral">2025</span>
+            </div>
+            <div class="project-card__meta">
+              <p class="project-card__tagline">Museo Virtual Interactivo del Cuerpo Humano, desarrollado y presentado como proyecto educativo.</p>
+            </div>
+            <div class="project-card__stack">
+              <span class="project-card__stack-pill">Unity3D</span>
+              <span class="project-card__stack-pill">C#</span>
+              <span class="project-card__stack-pill">Modelado 3D</span>
+              <span class="project-card__stack-pill">Blender</span>
+              <span class="project-card__stack-pill">GIMP</span>
+            </div>
+          </header>
+          <div class="tabs" role="tablist" aria-label="Secciones del proyecto ANTROPOS">
+            <button class="tab active" data-tab="exploracion" role="tab" aria-selected="true">Exploración</button>
+            <button class="tab" data-tab="sistemas" role="tab" aria-selected="false">Sistemas</button>
+            <button class="tab" data-tab="arte" role="tab" aria-selected="false">Arte &amp; UI</button>
+            <button class="tab" data-tab="tecnologia" role="tab" aria-selected="false">Tecnología</button>
+          </div>
+          <div class="project-card__body" id="antropos-body"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== 05 · CERTIFICATIONS ===================== -->
+    <section id="certifications" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-head__index">05</span>
+          <h2 class="section-head__title">Certificaciones</h2>
+        </header>
+
+        <div class="cert reveal reveal--scale">
+          <p class="cert__issuer">Amazon Web Services</p>
+          <h3 class="cert__title">AWS Certified Cloud Practitioner</h3>
+          <img class="cert__badge" src="assets/images/certs/image.png" alt="Insignia de AWS Certified Cloud Practitioner">
+          <a class="cert__button" href="https://www.credly.com/badges/94da0c3f-b31c-43e3-8aaa-d695b57df933/linked_in_profile" target="_blank" rel="noopener noreferrer">
+            Verificar credencial <i class="ri-arrow-right-up-line"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 06 · EDUCATION ===================== -->
+    <section id="education" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-head__index">06</span>
+          <h2 class="section-head__title">Educación</h2>
+        </header>
+
+        <div class="timeline timeline--education">
+          <div class="timeline__entry reveal reveal--left">
+            <div class="timeline__marker">
+              <img src="assets/images/education/logo-uaeh.png" alt="Logo de la Universidad Autónoma del Estado de Hidalgo">
+            </div>
+            <div class="timeline__content">
+              <h3 class="timeline__role">Licenciatura en Ciencias Computacionales</h3>
+              <p class="timeline__company">Universidad Autónoma del Estado de Hidalgo (UAEH)</p>
+              <span class="timeline__period">2022 – Actualidad</span>
+            </div>
+          </div>
+
+          <div class="timeline__entry reveal reveal--left" style="--reveal-delay: 120ms">
+            <div class="timeline__marker">
+              <img src="assets/images/education/utsh-logo.png" alt="Logo de la Universidad Tecnológica de la Sierra Hidalguense">
+            </div>
+            <div class="timeline__content">
+              <h3 class="timeline__role">TSU en Desarrollo de Software Multiplataforma</h3>
+              <p class="timeline__company">Universidad Tecnológica de la Sierra Hidalguense (UTSH)</p>
+              <span class="timeline__period">2020 – 2022</span>
+            </div>
+          </div>
+
+          <div class="timeline__entry reveal reveal--left" style="--reveal-delay: 240ms">
+            <div class="timeline__marker">
+              <img src="assets/images/education/cbtis5.png" alt="Logo del CBTis No. 5">
+            </div>
+            <div class="timeline__content">
+              <h3 class="timeline__role">Carrera Técnica en Programación</h3>
+              <p class="timeline__company">CBTis No. 5</p>
+              <span class="timeline__period">2017 – 2020</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="languages reveal reveal--left" style="--reveal-delay: 320ms">
+          <h3 class="languages__title">Idiomas</h3>
+          <ul class="languages__list">
+            <li>
+              <span class="languages__name">Español</span>
+              <span class="languages__level">Nativo</span>
+            </li>
+            <li>
+              <span class="languages__name">Inglés</span>
+              <span class="languages__level">Intermedio B1 Certificado</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="contact-rail" aria-label="Contacto">
+    <a href="https://github.com/FernandoGtz" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+      <i class="ri-github-fill"></i>
+    </a>
+    <a href="https://www.linkedin.com/in/fernando-david-g%C3%B3mez-guti%C3%A9rrez-23029a23a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+      <i class="ri-linkedin-box-fill"></i>
+    </a>
+    <a href="https://wa.me/527714065863" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+      <i class="ri-whatsapp-fill"></i>
+    </a>
+    <button class="contact-rail__copy" type="button" data-email="fernandogtz242@gmail.com" aria-label="Copiar correo electrónico">
+      <i class="ri-mail-fill"></i>
+    </button>
+  </aside>
+
+  <div class="contact-rail__line" aria-hidden="true"></div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <i class="ri-check-line"></i>
+    <span>Correo copiado al portapapeles</span>
+  </div>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Vista ampliada">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Cerrar"><i class="ri-close-line"></i></button>
+    <button class="lightbox__arrow lightbox__arrow--prev" id="lightboxPrev" aria-label="Anterior"><i class="ri-arrow-left-line"></i></button>
+    <button class="lightbox__arrow lightbox__arrow--next" id="lightboxNext" aria-label="Siguiente"><i class="ri-arrow-right-line"></i></button>
+    <div class="lightbox__media" id="lightboxMedia"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
