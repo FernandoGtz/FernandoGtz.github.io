@@ -1446,7 +1446,6 @@ main {
   .sidebar__label {
     opacity: 1;
     transform: translateX(0);
-    pointer-events: auto;
   }
 
   .contact-rail {
