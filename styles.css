@@ -999,7 +999,8 @@ main {
 .project-card__thumbs {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  justify-content: center;
+  gap: 14px;
 }
 
 .project-card__thumb {
@@ -1157,6 +1158,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
   transition: background var(--transition-fast), color var(--transition-fast);
 }
 
@@ -1179,6 +1181,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
   transition: background var(--transition-fast), color var(--transition-fast);
 }
 
@@ -1374,6 +1377,17 @@ main {
   main {
     margin-left: 0;
     padding-top: 56px;
+    padding-bottom: 88px;
+  }
+
+  .section--hero {
+    min-height: auto;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .toast {
+    bottom: 96px;
   }
 
   .sidebar {
@@ -1405,7 +1419,7 @@ main {
     top: 56px;
     left: 0;
     right: 0;
-    background: var(--bg-surface);
+    background: linear-gradient(to right, var(--bg-surface) 0%, rgba(17, 17, 40, 0) 100%);
     border-bottom: 1px solid var(--border);
     padding-top: 0;
     transform: translateY(-8px);
@@ -1436,24 +1450,34 @@ main {
   }
 
   .contact-rail {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    width: auto;
+    margin-right: 0;
+    flex-direction: row;
+    justify-content: center;
+    gap: 24px;
+    padding: 14px 16px;
+    background: linear-gradient(to top, var(--bg-card) 0%, rgba(22, 22, 42, 0.7) 70%, rgba(22, 22, 42, 0) 100%);
+  }
+
+  .contact-rail__line {
+    display: none;
+  }
+
+  .timeline__marker {
     display: none;
   }
 
   .timeline::before {
-    left: 108px;
+    left: 16px;
   }
 
   .timeline__entry {
-    padding-left: 128px;
-  }
-
-  .timeline__marker {
-    width: 88px;
-  }
-
-  .timeline__marker img {
-    max-width: 88px;
-    max-height: 40px;
+    padding-left: 48px;
   }
 
   .carousel__item {
