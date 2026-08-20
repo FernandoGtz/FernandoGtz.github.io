@@ -1384,6 +1384,7 @@ main {
     min-height: auto;
     align-items: flex-start;
     padding-top: 40px;
+    background-image: none;
   }
 
   .toast {

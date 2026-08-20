@@ -488,7 +488,7 @@ const STACK_DATA = [
     techs: [
       { name: 'AWS', icon: 'devicon-amazonwebservices-plain colored', interactive: false },
       { name: 'Railway', icon: 'ri-train-line', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'Cloudflare', icon: 'devicon-cloudflare-plain colored', interactive: false }
+      { name: 'Cloudflare', icon: 'devicon-cloudflare-plain colored', interactive: true, project: 'bmg', tab: 'overview' }
     ]
   },
   {
@@ -500,11 +500,11 @@ const STACK_DATA = [
     techs: [
       { name: 'Java', icon: 'devicon-java-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
       { name: 'Spring Boot 3', icon: 'devicon-spring-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'API REST', icon: 'ri-api-line', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'API REST', icon: 'ri-global-line', interactive: true, project: 'bmg', tab: 'overview' },
       { name: 'JWT / RBAC', icon: 'ri-shield-keyhole-line', interactive: true, project: 'bmg', tab: 'auth' },
-      { name: 'JPA / Hibernate', icon: 'devicon-hibernate-plain colored', interactive: false },
+      { name: 'JPA / Hibernate', icon: 'devicon-hibernate-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
       { name: 'Python', icon: 'devicon-python-plain colored', interactive: false },
-      { name: 'JavaFX', icon: 'ri-window-2-line', interactive: true, project: 'bmg', tab: 'edge' }
+      { name: 'Docker', icon: 'devicon-docker-plain colored', interactive: false }
     ]
   },
   {
@@ -527,10 +527,11 @@ const STACK_DATA = [
     corner: 'bottom-left',
     techs: [
       { name: 'Angular v20+', icon: 'devicon-angular-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'TypeScript', icon: 'devicon-typescript-plain colored', interactive: false },
+      { name: 'TypeScript', icon: 'devicon-typescript-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
       { name: 'JavaScript', icon: 'devicon-javascript-plain colored', interactive: false },
       { name: 'HTML', icon: 'devicon-html5-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'CSS', icon: 'devicon-css3-plain colored', interactive: true, project: 'bmg', tab: 'overview' }
+      { name: 'CSS', icon: 'devicon-css3-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'JavaFX', icon: 'ri-window-2-line', interactive: true, project: 'bmg', tab: 'edge' }
     ]
   },
   {
@@ -541,7 +542,8 @@ const STACK_DATA = [
     corner: 'bottom-right',
     techs: [
       { name: 'Git', icon: 'devicon-git-plain colored', interactive: false },
-      { name: 'GitHub', icon: 'ri-github-fill', interactive: false }
+      { name: 'GitHub', icon: 'ri-github-fill', interactive: false },
+      { name: 'OpenCode', icon: 'ri-terminal-line', interactive: false }
     ]
   }
 ];
