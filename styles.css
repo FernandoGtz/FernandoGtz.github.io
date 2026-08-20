@@ -350,7 +350,7 @@ main {
   align-items: center;
   background-image:
     linear-gradient(to right, var(--bg-primary) 35%, rgba(9, 9, 15, 0.55) 55%, rgba(9, 9, 15, 0.25) 100%),
-    url('assets/images/me-bg.jpeg');
+    url('assets/images/me.jpeg');
   background-size: cover;
   background-position: right center;
   background-repeat: no-repeat;
