@@ -111,11 +111,32 @@ let bmgTimer = null;
    Utilidades de render
    ========================================================================== */
 
+const IMG_EXTS = ['jpeg', 'png', 'jpg'];
+
+function imgFallback(img) {
+  const base = img.getAttribute('data-base');
+  const current = img.getAttribute('data-ext') || 'jpeg';
+  const idx = IMG_EXTS.indexOf(current);
+  if (idx !== -1 && idx < IMG_EXTS.length - 1) {
+    const next = IMG_EXTS[idx + 1];
+    img.setAttribute('data-ext', next);
+    img.src = base + '.' + next;
+  }
+}
+
+function imgTag(src, alt, lazy) {
+  const m = src.match(/^(.*)\.([a-z0-9]+)$/i);
+  const base = m ? m[1] : src;
+  const ext = m ? m[2].toLowerCase() : 'jpeg';
+  const lazyAttr = lazy ? ' loading="lazy"' : '';
+  return '<img src="' + src + '" alt="' + alt + '" data-base="' + base + '" data-ext="' + ext + '" onerror="imgFallback(this)"' + lazyAttr + '>';
+}
+
 function mediaInner(type, src, alt) {
   if (type === 'video') {
     return '<video src="' + src + '" autoplay muted loop playsinline></video>';
   }
-  return '<img src="' + src + '" alt="' + alt + '">';
+  return imgTag(src, alt);
 }
 
 function expandHint() {
@@ -140,7 +161,7 @@ function renderBMG(tabId) {
     .map((src, i) =>
       '<button class="project-card__thumb' + (i === 0 ? ' active' : '') +
       '" data-src="' + src + '" data-index="' + i + '" aria-label="Ver captura ' + (i + 1) + ' de ' + tabId + '">' +
-      '<img src="' + src + '" alt="' + altBase + ' ' + (i + 1) + '"></button>'
+      imgTag(src, altBase + ' ' + (i + 1)) + '</button>'
     )
     .join('');
 
@@ -199,7 +220,7 @@ function buildCarousel(trackEl, items, opts) {
       return '<div class="carousel__item"' + attrs +
         ' data-index="' + (i % items.length) + '" ' +
         'data-src="' + item.src + '" data-type="' + item.type + '" aria-label="' + label + '">' +
-        '<img src="' + item.src + '" alt="' + label + '" loading="lazy">' +
+        imgTag(item.src, label, true) +
         '</div>';
     })
     .join('');
@@ -374,7 +395,7 @@ function renderLightboxMedia() {
   if (!item) return;
   lightboxMedia.innerHTML = item.type === 'video'
     ? '<video src="' + item.src + '" controls autoplay></video>'
-    : '<img src="' + item.src + '" alt="Vista ampliada">';
+    : imgTag(item.src, 'Vista ampliada');
 }
 
 function openLightbox(gallery, index) {
