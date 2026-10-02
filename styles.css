@@ -556,6 +556,10 @@ main {
   background: linear-gradient(to bottom, var(--accent), var(--border));
 }
 
+#experience .timeline::before {
+  background: none;
+}
+
 .timeline__entry {
   position: relative;
   padding-left: 240px;
@@ -667,12 +671,18 @@ main {
   background: linear-gradient(to left, var(--accent-glow), transparent);
 }
 
-#experience .carousel {
+#experience-gallery,
+#experience-inline-gallery {
   width: 100vw;
   margin-left: calc(50% - 50vw - var(--sidebar-w) / 2);
   margin-right: calc(50% - 50vw - var(--sidebar-w) / 2);
   overflow-x: clip;
   overflow-y: visible;
+  touch-action: pan-y;
+}
+
+#experience-inline-gallery {
+  margin-bottom: 40px;
 }
 
 #experience .carousel__item:hover {
@@ -722,6 +732,11 @@ main {
 #experience-carousel .carousel__item {
   width: 400px;
   aspect-ratio: 2.13 / 1;
+}
+
+#experience-carousel-inline .carousel__item {
+  width: 400px;
+  aspect-ratio: 16 / 9;
 }
 
 @keyframes marquee {
@@ -1078,6 +1093,7 @@ main {
   overflow: visible;
   margin-left: calc(-1 * clamp(24px, 4vw, 40px));
   margin-right: calc(-1 * clamp(24px, 4vw, 40px));
+  touch-action: pan-y;
 }
 
 .project-card--antropos .project-card__title,
@@ -1403,7 +1419,6 @@ main {
     padding: 0 16px;
     overflow: visible;
     border-right: none;
-    border-bottom: 1px solid var(--border);
   }
 
   .sidebar:hover {
@@ -1484,13 +1499,27 @@ main {
     width: 220px;
   }
 
-  #experience-carousel .carousel__item {
+  #experience-carousel .carousel__item,
+  #experience-carousel-inline .carousel__item {
     width: 320px;
   }
 
-  #experience .carousel {
+  #experience-gallery,
+#experience-inline-gallery {
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
+  }
+
+  .carousel__item:hover {
+    transform: none;
+  }
+
+  #experience .carousel__item:hover {
+    transform: none;
+  }
+
+  .carousel:hover .carousel__track {
+    animation-play-state: running;
   }
 
   .lightbox__arrow {
@@ -1775,7 +1804,7 @@ main {
 
   .accordion-item.is-open .accordion-body {
     max-height: 400px;
-    padding: 12px 16px 20px;
+    padding: 30px 16px 20px;
   }
 
   .accordion-tech {

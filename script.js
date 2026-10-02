@@ -98,7 +98,8 @@ const ANTROPOS = {
   carousel: ANTROPOS_GIFS.concat(ANTROPOS_SCREENSHOTS).map((src) => ({ type: 'image', src: src }))
 };
 
-const EXPERIENCE_IMAGES = range('assets/images/experience/carousel/exp-social-', 'gif', 1, 4);
+const EXPERIENCE_IMAGES_VLLN = range('assets/images/experience/VLLN/carousel/exp-vlln-', 'png', 1, 21);
+const EXPERIENCE_IMAGES_CEL = range('assets/images/experience/CEL/carousel/exp-cel-', 'gif', 1, 4);
 
 const ANTROPOS_LIGHTBOX = [{ type: 'video', src: 'assets/videos/antropos/antropos-npc.mp4' }]
   .concat(ANTROPOS.carousel);
@@ -129,7 +130,7 @@ function imgTag(src, alt, lazy) {
   const base = m ? m[1] : src;
   const ext = m ? m[2].toLowerCase() : 'jpeg';
   const lazyAttr = lazy ? ' loading="lazy"' : '';
-  return '<img src="' + src + '" alt="' + alt + '" data-base="' + base + '" data-ext="' + ext + '" onerror="imgFallback(this)"' + lazyAttr + '>';
+  return '<img src="' + src + '" alt="' + alt + '" draggable="false" data-base="' + base + '" data-ext="' + ext + '" onerror="imgFallback(this)"' + lazyAttr + '>';
 }
 
 function mediaInner(type, src, alt) {
@@ -156,14 +157,7 @@ function renderBMG(tabId) {
   const body = document.getElementById('bmg-body');
   const main = data.images[0];
   const altBase = 'BMG GYM SYSTEM — ' + tabId;
-
-  const thumbs = data.images
-    .map((src, i) =>
-      '<button class="project-card__thumb' + (i === 0 ? ' active' : '') +
-      '" data-src="' + src + '" data-index="' + i + '" aria-label="Ver captura ' + (i + 1) + ' de ' + tabId + '">' +
-      imgTag(src, altBase + ' ' + (i + 1)) + '</button>'
-    )
-    .join('');
+  const duration = data.images.length * 4;
 
   body.innerHTML =
     '<div class="project-card__layout">' +
@@ -172,8 +166,17 @@ function renderBMG(tabId) {
       '</figure>' +
       '<ul class="project-card__bullets">' + renderBullets(data.bullets) + '</ul>' +
     '</div>' +
-    '<div class="project-card__thumbs">' + thumbs + '</div>';
+    '<div class="carousel" aria-label="Galería de ' + tabId + '">' +
+      '<div class="carousel__track" id="bmg-carousel"></div>' +
+    '</div>';
 
+  buildCarousel(document.getElementById('bmg-carousel'), data.images.map(function (s) {
+    return { type: 'image', src: s };
+  }), { duration: duration, interactive: true });
+
+  initDraggableMarquee(document.getElementById('bmg-carousel').closest('.carousel'), { duration: duration });
+
+  updateBmgCarouselActive(main);
   startBmgAuto();
 }
 
@@ -200,8 +203,15 @@ function renderAntropos(tabId) {
     interactive: true
   });
 
+  initDraggableMarquee(document.getElementById('antropos-carousel').closest('.carousel'), {
+    duration: ANTROPOS.carousel.length * 6
+  });
+
   if (hero.type === 'image') {
     highlightAntroposItem(hero.src);
+    startAntroposAuto();
+  } else {
+    stopAntroposAuto();
   }
 }
 
@@ -224,6 +234,165 @@ function buildCarousel(trackEl, items, opts) {
         '</div>';
     })
     .join('');
+}
+
+// Segundos que tarda cada item en cruzar la pantalla. Como la velocidad se
+// normaliza por el nº de items, el conteo se cancela en la fórmula:
+//   speed = (w / half) / T  →  itemStep / T   (independiente de cuántos items haya)
+const CAROUSEL_SECONDS_PER_ITEM = 5;
+
+function initDraggableMarquee(carouselEl, opts) {
+  opts = opts || {};
+  const track = carouselEl.querySelector('.carousel__track');
+  if (!track || !track.children.length) return;
+
+  // JS controla el transform; se elimina la animación CSS del marquee.
+  track.style.animation = 'none';
+
+  const items = Array.from(track.children);
+  const half = Math.max(1, Math.floor(items.length / 2));
+  const gap = 16;
+  const duration = opts.duration || 26;
+  const reverse = !!opts.reverse;
+
+  let offset = 0;
+  let speed = 0;
+  let w = 0;
+  let lastRender = null;
+  let dragging = false;
+  let hoverPaused = false;
+  let horizontalIntent = null;
+  let startX = 0;
+  let startY = 0;
+  let startOffset = 0;
+  let pendingX = null;
+  let pendingY = null;
+  let lastTime = null;
+  let rafId = null;
+
+  function measure() {
+    w = 0;
+    for (let i = 0; i < half; i++) {
+      w += (items[i].offsetWidth || 0) + gap;
+    }
+    // Velocidad constante por item: divide el ancho total entre el nº de items
+    // (half) y entre los segundos por item, así el conteo se cancela.
+    speed = (w / half) / CAROUSEL_SECONDS_PER_ITEM * (reverse ? 1 : -1);
+  }
+
+  function wrap() {
+    if (w <= 0) return;
+    while (offset < -w) offset += w;
+    while (offset > 0) offset -= w;
+  }
+
+  function render() {
+    if (lastRender !== offset) {
+      track.style.transform = 'translateX(' + offset + 'px)';
+      lastRender = offset;
+    }
+  }
+
+  function step(t) {
+    if (!carouselEl.isConnected) {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', measure);
+      return;
+    }
+    if (lastTime == null) lastTime = t;
+    const dt = Math.min((t - lastTime) / 1000, 0.05);
+    lastTime = t;
+    if (dragging) {
+      if (horizontalIntent !== false && pendingX != null) {
+        offset = Math.max(-w, Math.min(0, startOffset + (pendingX - startX)));
+        pendingX = null;
+      }
+    } else if (!hoverPaused) {
+      offset += speed * dt;
+      wrap();
+    }
+    render();
+    rafId = requestAnimationFrame(step);
+  }
+
+  function startDrag(clientX, clientY, immediate) {
+    dragging = true;
+    horizontalIntent = immediate ? true : null;
+    startX = clientX;
+    startY = clientY;
+    startOffset = offset;
+    pendingX = clientX;
+    pendingY = clientY;
+  }
+
+  function onMove(clientX, clientY) {
+    if (!dragging) return false;
+    pendingX = clientX;
+    pendingY = clientY;
+    if (horizontalIntent == null) {
+      const dx = pendingX - startX;
+      const dy = pendingY - startY;
+      if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+        horizontalIntent = true;
+      } else if (Math.abs(dy) > 8) {
+        horizontalIntent = false;
+      }
+    }
+    if (horizontalIntent === false) {
+      dragging = false;
+    }
+    return horizontalIntent === true;
+  }
+
+  function endDrag() {
+    dragging = false;
+    horizontalIntent = null;
+    wrap();
+  }
+
+  carouselEl.addEventListener('mousedown', function (e) {
+    if (e.button !== 0) return;
+    startDrag(e.clientX, e.clientY, true);
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', function (e) {
+    if (dragging && horizontalIntent !== false) onMove(e.clientX, e.clientY);
+  });
+  window.addEventListener('mouseup', function () {
+    if (dragging) endDrag();
+  });
+
+  carouselEl.addEventListener('mouseenter', function () {
+    if (!dragging) hoverPaused = true;
+  });
+  carouselEl.addEventListener('mouseleave', function () {
+    hoverPaused = false;
+    lastTime = null;
+  });
+
+  carouselEl.addEventListener('touchstart', function (e) {
+    startDrag(e.touches[0].clientX, e.touches[0].clientY, false);
+  }, { passive: true });
+  carouselEl.addEventListener('touchmove', function (e) {
+    if (onMove(e.touches[0].clientX, e.touches[0].clientY)) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+  carouselEl.addEventListener('touchend', function () {
+    if (dragging) endDrag();
+  }, { passive: true });
+  carouselEl.addEventListener('touchcancel', function () {
+    if (dragging) endDrag();
+  }, { passive: true });
+
+  window.addEventListener('resize', measure);
+
+  requestAnimationFrame(function () {
+    measure();
+    offset = reverse ? -w : 0;
+    lastTime = null;
+    rafId = requestAnimationFrame(step);
+  });
 }
 
 function swapMedia(mediaEl, type, src, alt) {
@@ -255,8 +424,14 @@ function updateBmgMain() {
   if (!media) return;
   media.dataset.index = String(bmgIndex);
   swapMedia(media, 'image', src, 'BMG GYM SYSTEM — ' + bmgTab + ' ' + (bmgIndex + 1));
-  document.querySelectorAll('#bmg-body .project-card__thumb').forEach(function (t, i) {
-    t.classList.toggle('active', i === bmgIndex);
+  updateBmgCarouselActive(src);
+}
+
+function updateBmgCarouselActive(src) {
+  const track = document.getElementById('bmg-carousel');
+  if (!track) return;
+  track.querySelectorAll('.carousel__item').forEach(function (item) {
+    item.classList.toggle('active', item.dataset.src === src);
   });
 }
 
@@ -292,6 +467,39 @@ function activateAntroposItem(item) {
   swapMedia(media, item.dataset.type, item.dataset.src, 'Recurso ANTROPOS');
   media.dataset.lbindex = String(antroposLbIndex(item.dataset.src));
   highlightAntroposItem(item.dataset.src);
+  startAntroposAuto();
+}
+
+let antroposTimer = null;
+
+function currentAntroposResourceIndex() {
+  const media = document.querySelector('#project-antropos .project-card__media');
+  if (!media) return -1;
+  const src = media.dataset.src;
+  for (let i = 0; i < ANTROPOS.carousel.length; i++) {
+    if (ANTROPOS.carousel[i].src === src) return i;
+  }
+  return -1;
+}
+
+function advanceAntroposHero() {
+  const media = document.querySelector('#project-antropos .project-card__media');
+  if (!media || media.dataset.type === 'video') return;
+  const cur = currentAntroposResourceIndex();
+  const next = cur === -1 ? 0 : (cur + 1) % ANTROPOS.carousel.length;
+  const item = ANTROPOS.carousel[next];
+  swapMedia(media, 'image', item.src, 'Recurso ANTROPOS');
+  media.dataset.lbindex = String(next + 1);
+  highlightAntroposItem(item.src);
+}
+
+function startAntroposAuto() {
+  clearInterval(antroposTimer);
+  antroposTimer = setInterval(advanceAntroposHero, 3000);
+}
+
+function stopAntroposAuto() {
+  clearInterval(antroposTimer);
 }
 
 /* ==========================================================================
@@ -339,9 +547,9 @@ document.querySelectorAll('.project-card').forEach(function (card) {
    ========================================================================== */
 
 document.addEventListener('click', function (e) {
-  const thumb = e.target.closest('.project-card__thumb');
-  if (thumb) {
-    bmgIndex = parseInt(thumb.dataset.index, 10) || 0;
+  const bmgCarouselItem = e.target.closest('#bmg-carousel .carousel__item');
+  if (bmgCarouselItem) {
+    bmgIndex = parseInt(bmgCarouselItem.dataset.index, 10) || 0;
     updateBmgMain();
     startBmgAuto();
     return;
@@ -370,6 +578,14 @@ document.addEventListener('click', function (e) {
 
 document.addEventListener('keydown', function (e) {
   if (e.key !== 'Enter' && e.key !== ' ') return;
+  const bmgCarouselItem = e.target.closest('#bmg-carousel .carousel__item');
+  if (bmgCarouselItem) {
+    e.preventDefault();
+    bmgIndex = parseInt(bmgCarouselItem.dataset.index, 10) || 0;
+    updateBmgMain();
+    startBmgAuto();
+    return;
+  }
   const carouselItem = e.target.closest('#antropos-carousel .carousel__item');
   if (carouselItem) {
     e.preventDefault();
@@ -921,9 +1137,17 @@ document.querySelectorAll('.reveal').forEach(function (el) {
    Render inicial
    ========================================================================== */
 
-buildCarousel(document.getElementById('experience-carousel'), EXPERIENCE_IMAGES.map(function (src) {
+buildCarousel(document.getElementById('experience-carousel'), EXPERIENCE_IMAGES_CEL.map(function (src) {
   return { type: 'image', src: src };
 }), { duration: 26, interactive: false });
+
+initDraggableMarquee(document.getElementById('experience-carousel').closest('.carousel'), { duration: 26 });
+
+buildCarousel(document.getElementById('experience-carousel-inline'), EXPERIENCE_IMAGES_VLLN.map(function (src) {
+  return { type: 'image', src: src };
+}), { duration: 26, interactive: false });
+
+initDraggableMarquee(document.getElementById('experience-carousel-inline').closest('.carousel'), { duration: 26, reverse: true });
 
 renderBMG('overview');
 renderAntropos('exploracion');
