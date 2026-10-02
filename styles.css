@@ -1893,3 +1893,23 @@ main {
   font-size: 13px;
   color: var(--text-accent);
 }
+
+/* ==========================================================================
+   Movimiento reducido (prefers-reduced-motion: reduce)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}

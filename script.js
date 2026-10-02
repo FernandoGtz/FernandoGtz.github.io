@@ -1,5 +1,8 @@
 'use strict';
 
+// Preferencia de movimiento reducido (se consulta una vez al cargar).
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* ==========================================================================
    Datos de assets (adaptados a los archivos reales del proyecto)
    ========================================================================== */
@@ -135,7 +138,8 @@ function imgTag(src, alt, lazy) {
 
 function mediaInner(type, src, alt) {
   if (type === 'video') {
-    return '<video src="' + src + '" autoplay muted loop playsinline></video>';
+    const autoplay = prefersReducedMotion ? '' : ' autoplay';
+    return '<video src="' + src + '"' + autoplay + ' muted loop playsinline></video>';
   }
   return imgTag(src, alt);
 }
@@ -274,6 +278,11 @@ function initDraggableMarquee(carouselEl, opts) {
     w = 0;
     for (let i = 0; i < half; i++) {
       w += (items[i].offsetWidth || 0) + gap;
+    }
+    // Con movimiento reducido no hay auto-scroll (velocidad 0); solo se puede arrastrar.
+    if (prefersReducedMotion) {
+      speed = 0;
+      return;
     }
     // Velocidad constante por item: divide el ancho total entre el nº de items
     // (half) y entre los segundos por item, así el conteo se cancela.
@@ -437,6 +446,7 @@ function updateBmgCarouselActive(src) {
 
 function startBmgAuto() {
   clearInterval(bmgTimer);
+  if (prefersReducedMotion) return;
   bmgTimer = setInterval(function () {
     bmgIndex = (bmgIndex + 1) % BMG[bmgTab].images.length;
     updateBmgMain();
@@ -495,6 +505,7 @@ function advanceAntroposHero() {
 
 function startAntroposAuto() {
   clearInterval(antroposTimer);
+  if (prefersReducedMotion) return;
   antroposTimer = setInterval(advanceAntroposHero, 3000);
 }
 
@@ -609,8 +620,9 @@ let lbIndex = 0;
 function renderLightboxMedia() {
   const item = lbGallery[lbIndex];
   if (!item) return;
+  const autoplay = prefersReducedMotion ? '' : ' autoplay';
   lightboxMedia.innerHTML = item.type === 'video'
-    ? '<video src="' + item.src + '" controls autoplay></video>'
+    ? '<video src="' + item.src + '" controls' + autoplay + '></video>'
     : imgTag(item.src, 'Vista ampliada');
 }
 
@@ -1160,6 +1172,7 @@ renderAntropos('exploracion');
    ========================================================================== */
 
 (function () {
+  if (prefersReducedMotion) return;
   const canvas = document.getElementById('particles');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
