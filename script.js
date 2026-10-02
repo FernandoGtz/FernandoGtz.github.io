@@ -151,8 +151,14 @@ function mediaInner(type, src, alt) {
   return imgTag(src, alt);
 }
 
+// Renderiza un icono inline del sprite. `key` es 'ri:nombre' o 'dev:nombre'.
+function icon(key, cls) {
+  const id = key.indexOf('dev:') === 0 ? 'i-dev-' + key.slice(4) : 'i-ri-' + key.slice(3);
+  return '<svg class="icon' + (cls ? ' ' + cls : '') + '" aria-hidden="true"><use href="#' + id + '"></use></svg>';
+}
+
 function expandHint() {
-  return '<span class="expand-hint"><i class="ri-fullscreen-line"></i></span>';
+  return '<span class="expand-hint">' + icon('ri:fullscreen-line') + '</span>';
 }
 
 function renderBullets(bullets) {
@@ -782,68 +788,68 @@ const STACK_DATA = [
   {
     id: 'cloud',
     label: 'Cloud',
-    icon: 'ri-cloud-line',
+    icon: 'ri:cloud-line',
     gridIndex: 0,
     corner: 'top-left',
     techs: [
-      { name: 'AWS', icon: 'devicon-amazonwebservices-plain colored', interactive: false },
-      { name: 'Railway', icon: 'ri-train-line', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'Cloudflare', icon: 'devicon-cloudflare-plain colored', interactive: true, project: 'bmg', tab: 'overview' }
+      { name: 'AWS', icon: 'dev:amazonwebservices', interactive: false },
+      { name: 'Railway', icon: 'ri:train-line', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'Cloudflare', icon: 'dev:cloudflare', interactive: true, project: 'bmg', tab: 'overview' }
     ]
   },
   {
     id: 'backend',
     label: 'Backend',
-    icon: 'ri-code-s-slash-line',
+    icon: 'ri:code-s-slash-line',
     gridIndex: 1,
     corner: null,
     techs: [
-      { name: 'Java', icon: 'devicon-java-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'Spring Boot 3', icon: 'devicon-spring-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'API REST', icon: 'ri-global-line', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'JWT / RBAC', icon: 'ri-shield-keyhole-line', interactive: true, project: 'bmg', tab: 'auth' },
-      { name: 'JPA / Hibernate', icon: 'devicon-hibernate-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'Python', icon: 'devicon-python-plain colored', interactive: false },
-      { name: 'Docker', icon: 'devicon-docker-plain colored', interactive: false }
+      { name: 'Java', icon: 'dev:java', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'Spring Boot 3', icon: 'dev:spring', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'API REST', icon: 'ri:global-line', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'JWT / RBAC', icon: 'ri:shield-keyhole-line', interactive: true, project: 'bmg', tab: 'auth' },
+      { name: 'JPA / Hibernate', icon: 'dev:hibernate', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'Python', icon: 'dev:python', interactive: false },
+      { name: 'Docker', icon: 'dev:docker', interactive: false }
     ]
   },
   {
     id: 'databases',
     label: 'Databases',
-    icon: 'ri-database-2-line',
+    icon: 'ri:database-2-line',
     gridIndex: 2,
     corner: 'top-right',
     techs: [
-      { name: 'PostgreSQL', icon: 'devicon-postgresql-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'MySQL', icon: 'devicon-mysql-plain colored', interactive: false },
-      { name: 'SQLite', icon: 'devicon-sqlite-plain colored', interactive: true, project: 'bmg', tab: 'edge' }
+      { name: 'PostgreSQL', icon: 'dev:postgresql', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'MySQL', icon: 'dev:mysql', interactive: false },
+      { name: 'SQLite', icon: 'dev:sqlite', interactive: true, project: 'bmg', tab: 'edge' }
     ]
   },
   {
     id: 'frontend',
     label: 'Frontend',
-    icon: 'ri-layout-line',
+    icon: 'ri:layout-line',
     gridIndex: 3,
     corner: 'bottom-left',
     techs: [
-      { name: 'Angular v20+', icon: 'devicon-angular-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'TypeScript', icon: 'devicon-typescript-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'JavaScript', icon: 'devicon-javascript-plain colored', interactive: false },
-      { name: 'HTML', icon: 'devicon-html5-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'CSS', icon: 'devicon-css3-plain colored', interactive: true, project: 'bmg', tab: 'overview' },
-      { name: 'JavaFX', icon: 'ri-window-2-line', interactive: true, project: 'bmg', tab: 'edge' }
+      { name: 'Angular v20+', icon: 'dev:angular', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'TypeScript', icon: 'dev:typescript', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'JavaScript', icon: 'dev:javascript', interactive: false },
+      { name: 'HTML', icon: 'dev:html5', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'CSS', icon: 'dev:css3', interactive: true, project: 'bmg', tab: 'overview' },
+      { name: 'JavaFX', icon: 'ri:window-2-line', interactive: true, project: 'bmg', tab: 'edge' }
     ]
   },
   {
     id: 'tools',
     label: 'Tools',
-    icon: 'ri-tools-line',
+    icon: 'ri:tools-line',
     gridIndex: 4,
     corner: 'bottom-right',
     techs: [
-      { name: 'Git', icon: 'devicon-git-plain colored', interactive: false },
-      { name: 'GitHub', icon: 'ri-github-fill', interactive: false },
-      { name: 'OpenCode', icon: 'ri-terminal-line', interactive: false }
+      { name: 'Git', icon: 'dev:git', interactive: false },
+      { name: 'GitHub', icon: 'ri:github-fill', interactive: false },
+      { name: 'OpenCode', icon: 'ri:terminal-line', interactive: false }
     ]
   }
 ];
@@ -982,7 +988,7 @@ function activateCategory(catId) {
 
     sat.innerHTML =
       '<div class="satellite__inner">' +
-        '<span class="satellite__icon"><i class="' + tech.icon + '"></i></span>' +
+        '<span class="satellite__icon">' + icon(tech.icon) + '</span>' +
         '<span class="satellite__name">' + tech.name + '</span>' +
       '</div>';
 
@@ -1016,7 +1022,7 @@ function initStack() {
     card.dataset.catId = cat.id;
     card.setAttribute('aria-label', 'Categoría ' + cat.label);
     card.innerHTML =
-      '<span class="cat-card__icon"><i class="' + cat.icon + '"></i></span>' +
+      '<span class="cat-card__icon">' + icon(cat.icon) + '</span>' +
       '<span class="cat-card__label">' + cat.label + '</span>';
     orbit.appendChild(card);
   });
@@ -1061,7 +1067,7 @@ function initStack() {
     const techsHTML = cat.techs.map(function (t) {
       return '<div class="accordion-tech' + (t.interactive ? ' is-interactive' : '') + '"' +
         (t.interactive ? ' data-project="' + t.project + '" data-tab="' + t.tab + '" role="button" tabindex="0" aria-label="Ver ' + t.name + ' en proyectos"' : '') + '>' +
-        '<span class="accordion-tech__icon"><i class="' + t.icon + '"></i></span>' +
+        '<span class="accordion-tech__icon">' + icon(t.icon) + '</span>' +
         '<span class="accordion-tech__name">' + t.name + '</span>' +
         '</div>';
     }).join('');
@@ -1069,10 +1075,10 @@ function initStack() {
     item.innerHTML =
       '<button class="accordion-trigger" aria-expanded="false" aria-controls="acc-body-' + cat.id + '">' +
         '<span class="accordion-trigger__left">' +
-          '<i class="' + cat.icon + ' accordion-trigger__icon"></i>' +
+          icon(cat.icon, 'accordion-trigger__icon') +
           '<span class="accordion-trigger__label">' + cat.label + '</span>' +
         '</span>' +
-        '<i class="ri-arrow-down-s-line accordion-trigger__chevron"></i>' +
+        icon('ri:arrow-down-s-line', 'accordion-trigger__chevron') +
       '</button>' +
       '<div class="accordion-body" id="acc-body-' + cat.id + '" role="region">' + techsHTML + '</div>';
 

@@ -90,6 +90,14 @@ button {
   cursor: pointer;
 }
 
+/* Iconos inline (SVG sprite): 1em hereda el font-size del contenedor. */
+.icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
 ::selection {
   background: var(--accent-muted);
   color: var(--text-primary);
@@ -1375,7 +1383,7 @@ main {
   z-index: 500;
 }
 
-.toast i {
+.toast .icon {
   color: var(--accent-light);
 }
 
@@ -1685,8 +1693,7 @@ main {
   line-height: 1;
 }
 
-.satellite__icon i {
-  font-size: 28px;
+.satellite__icon .icon {
   color: var(--text-muted);
 }
 
