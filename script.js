@@ -3,6 +3,13 @@
 // Preferencia de movimiento reducido (se consulta una vez al cargar).
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Devuelve true si el elemento está dentro del viewport y la pestaña está visible.
+function isInViewport(el) {
+  if (!el || document.hidden) return false;
+  const r = el.getBoundingClientRect();
+  return r.top < window.innerHeight && r.bottom > 0;
+}
+
 /* ==========================================================================
    Datos de assets (adaptados a los archivos reales del proyecto)
    ========================================================================== */
@@ -273,6 +280,8 @@ function initDraggableMarquee(carouselEl, opts) {
   let pendingY = null;
   let lastTime = null;
   let rafId = null;
+  let visible = false;
+  let visibilityObserver = null;
 
   function measure() {
     w = 0;
@@ -302,10 +311,16 @@ function initDraggableMarquee(carouselEl, opts) {
     }
   }
 
+  function cleanup() {
+    halt();
+    window.removeEventListener('resize', measure);
+    if (visibilityObserver) visibilityObserver.disconnect();
+    document.removeEventListener('visibilitychange', updateMotion);
+  }
+
   function step(t) {
     if (!carouselEl.isConnected) {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', measure);
+      cleanup();
       return;
     }
     if (lastTime == null) lastTime = t;
@@ -324,6 +339,29 @@ function initDraggableMarquee(carouselEl, opts) {
     rafId = requestAnimationFrame(step);
   }
 
+  function run() {
+    if (rafId == null) {
+      lastTime = null;
+      rafId = requestAnimationFrame(step);
+    }
+  }
+
+  function halt() {
+    if (rafId != null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  }
+
+  function updateMotion() {
+    if (dragging) {
+      run();
+      return;
+    }
+    if (visible && !document.hidden && !prefersReducedMotion) run();
+    else halt();
+  }
+
   function startDrag(clientX, clientY, immediate) {
     dragging = true;
     horizontalIntent = immediate ? true : null;
@@ -332,6 +370,7 @@ function initDraggableMarquee(carouselEl, opts) {
     startOffset = offset;
     pendingX = clientX;
     pendingY = clientY;
+    run();
   }
 
   function onMove(clientX, clientY) {
@@ -357,6 +396,7 @@ function initDraggableMarquee(carouselEl, opts) {
     dragging = false;
     horizontalIntent = null;
     wrap();
+    updateMotion();
   }
 
   carouselEl.addEventListener('mousedown', function (e) {
@@ -396,11 +436,18 @@ function initDraggableMarquee(carouselEl, opts) {
 
   window.addEventListener('resize', measure);
 
+  visibilityObserver = new IntersectionObserver(function (entries) {
+    visible = entries[0].isIntersecting;
+    updateMotion();
+  }, { rootMargin: '200px' });
+  visibilityObserver.observe(carouselEl);
+
+  document.addEventListener('visibilitychange', updateMotion);
+
   requestAnimationFrame(function () {
     measure();
     offset = reverse ? -w : 0;
-    lastTime = null;
-    rafId = requestAnimationFrame(step);
+    updateMotion();
   });
 }
 
@@ -448,6 +495,7 @@ function startBmgAuto() {
   clearInterval(bmgTimer);
   if (prefersReducedMotion) return;
   bmgTimer = setInterval(function () {
+    if (!isInViewport(document.getElementById('project-bmg'))) return;
     bmgIndex = (bmgIndex + 1) % BMG[bmgTab].images.length;
     updateBmgMain();
   }, 3000);
@@ -506,7 +554,10 @@ function advanceAntroposHero() {
 function startAntroposAuto() {
   clearInterval(antroposTimer);
   if (prefersReducedMotion) return;
-  antroposTimer = setInterval(advanceAntroposHero, 3000);
+  antroposTimer = setInterval(function () {
+    if (!isInViewport(document.getElementById('project-antropos'))) return;
+    advanceAntroposHero();
+  }, 3000);
 }
 
 function stopAntroposAuto() {
@@ -1188,6 +1239,7 @@ renderAntropos('exploracion');
   let particles = [];
   let width = 0;
   let height = 0;
+  let rafId = null;
 
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1241,10 +1293,26 @@ renderAntropos('exploracion');
       ctx.fill();
     }
     ctx.globalAlpha = 1;
-    requestAnimationFrame(draw);
+    rafId = requestAnimationFrame(draw);
   }
+
+  function start() {
+    if (rafId == null) rafId = requestAnimationFrame(draw);
+  }
+
+  function stop() {
+    if (rafId != null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  }
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stop();
+    else start();
+  });
 
   resize();
   window.addEventListener('resize', resize);
-  requestAnimationFrame(draw);
+  start();
 })();
