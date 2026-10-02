@@ -1132,10 +1132,12 @@ initStack();
 
 const glow = document.getElementById('cursor-glow');
 
-window.addEventListener('mousemove', function (e) {
-  glow.style.left = e.clientX + 'px';
-  glow.style.top = e.clientY + 'px';
-});
+// Solo en dispositivos con puntero preciso; en táctil no se activa.
+if (window.matchMedia('(pointer: fine)').matches && glow) {
+  window.addEventListener('mousemove', function (e) {
+    glow.style.transform = 'translate(' + (e.clientX - 160) + 'px, ' + (e.clientY - 160) + 'px)';
+  });
+}
 
 /* ==========================================================================
    Contact rail: copiar correo al portapapeles + toast
