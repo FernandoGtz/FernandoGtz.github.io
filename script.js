@@ -1123,9 +1123,12 @@ emailCopyBtn.addEventListener('click', function () {
    Reveal (IntersectionObserver)
    ========================================================================== */
 
-const revealObserver = new IntersectionObserver(function (entries) {
+const revealObserver = new IntersectionObserver(function (entries, observer) {
   entries.forEach(function (entry) {
-    entry.target.classList.toggle('revealed', entry.isIntersecting);
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      observer.unobserve(entry.target);
+    }
   });
 }, { threshold: 0.15 });
 
