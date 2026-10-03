@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
 <symbol id="i-ri-fullscreen-line" viewBox="0 0 24 24"><path fill="currentColor" d="M8 3V5H4V9H2V3H8ZM2 21V15H4V19H8V21H2ZM22 21H16V19H20V15H22V21ZM22 9H20V5H16V3H22V9Z"/></symbol>
 <symbol id="i-ri-shield-keyhole-line" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1L20.2169 2.82598C20.6745 2.92766 21 3.33347 21 3.80217V13.7889C21 15.795 19.9974 17.6684 18.3282 18.7812L12 23L5.6718 18.7812C4.00261 17.6684 3 15.795 3 13.7889V3.80217C3 3.33347 3.32553 2.92766 3.78307 2.82598L12 1ZM12 3.04879L5 4.60434V13.7889C5 15.1263 5.6684 16.3752 6.7812 17.1171L12 20.5963L17.2188 17.1171C18.3316 16.3752 19 15.1263 19 13.7889V4.60434L12 3.04879ZM12 7C13.1046 7 14 7.89543 14 9C14 9.73984 13.5983 10.3858 13.0011 10.7318L13 15H11L10.9999 10.7324C10.4022 10.3866 10 9.74025 10 9C10 7.89543 10.8954 7 12 7Z"/></symbol>
@@ -78,30 +79,30 @@
     </button>
     <nav class="sidebar__nav" aria-label="Navegación principal">
       <ol class="sidebar__list">
-        <li class="sidebar__item active" data-section="about">
-          <span class="sidebar__number">01</span>
-          <span class="sidebar__label">Sobre mí</span>
-        </li>
-        <li class="sidebar__item" data-section="stack">
-          <span class="sidebar__number">02</span>
-          <span class="sidebar__label">Stack</span>
-        </li>
-        <li class="sidebar__item" data-section="experience">
-          <span class="sidebar__number">03</span>
-          <span class="sidebar__label">Experiencia</span>
-        </li>
-        <li class="sidebar__item" data-section="projects">
-          <span class="sidebar__number">04</span>
-          <span class="sidebar__label">Proyectos</span>
-        </li>
-        <li class="sidebar__item" data-section="certifications">
-          <span class="sidebar__number">05</span>
-          <span class="sidebar__label">Certificaciones</span>
-        </li>
-        <li class="sidebar__item" data-section="education">
-          <span class="sidebar__number">06</span>
-          <span class="sidebar__label">Educación</span>
-        </li>
+        <li><a class="sidebar__item active" href="#about" data-section="about">
+  <span class="sidebar__number">01</span>
+  <span class="sidebar__label">Sobre mí</span>
+</a></li>
+        <li><a class="sidebar__item" href="#stack" data-section="stack">
+  <span class="sidebar__number">02</span>
+  <span class="sidebar__label">Stack</span>
+</a></li>
+        <li><a class="sidebar__item" href="#experience" data-section="experience">
+  <span class="sidebar__number">03</span>
+  <span class="sidebar__label">Experiencia</span>
+</a></li>
+        <li><a class="sidebar__item" href="#projects" data-section="projects">
+  <span class="sidebar__number">04</span>
+  <span class="sidebar__label">Proyectos</span>
+</a></li>
+        <li><a class="sidebar__item" href="#certifications" data-section="certifications">
+  <span class="sidebar__number">05</span>
+  <span class="sidebar__label">Certificaciones</span>
+</a></li>
+        <li><a class="sidebar__item" href="#education" data-section="education">
+  <span class="sidebar__number">06</span>
+  <span class="sidebar__label">Educación</span>
+</a></li>
       </ol>
     </nav>
   </aside>

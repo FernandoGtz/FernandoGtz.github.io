@@ -673,6 +673,7 @@ const lightboxNext = document.getElementById('lightboxNext');
 
 let lbGallery = [];
 let lbIndex = 0;
+let lastFocused = null;
 
 function renderLightboxMedia() {
   const item = lbGallery[lbIndex];
@@ -686,10 +687,12 @@ function renderLightboxMedia() {
 function openLightbox(gallery, index) {
   lbGallery = gallery || [];
   lbIndex = index || 0;
+  lastFocused = document.activeElement;
   renderLightboxMedia();
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  lightboxClose.focus();
 }
 
 function stepLightbox(delta) {
@@ -699,10 +702,15 @@ function stepLightbox(delta) {
 }
 
 function closeLightbox() {
+  const video = lightboxMedia.querySelector('video');
+  if (video) video.pause();
   lightbox.classList.remove('open');
   lightbox.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
   lightboxMedia.innerHTML = '';
+  if (lastFocused && typeof lastFocused.focus === 'function') {
+    lastFocused.focus();
+  }
 }
 
 lightboxClose.addEventListener('click', closeLightbox);
@@ -729,6 +737,17 @@ document.addEventListener('keydown', function (e) {
     stepLightbox(-1);
   } else if (e.key === 'ArrowRight') {
     stepLightbox(1);
+  } else if (e.key === 'Tab') {
+    const focusable = [lightboxClose, lightboxPrev, lightboxNext];
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   }
 });
 
@@ -768,7 +787,8 @@ function closeMenu() {
 }
 
 spyItems.forEach(function (item) {
-  item.addEventListener('click', function () {
+  item.addEventListener('click', function (e) {
+    e.preventDefault();
     const target = document.getElementById(item.dataset.section);
     if (target) target.scrollIntoView({ behavior: 'smooth' });
     closeMenu();

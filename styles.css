@@ -98,6 +98,24 @@ button {
   display: inline-block;
 }
 
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.skip-link:focus {
+  left: 8px;
+  top: 8px;
+}
+
 ::selection {
   background: var(--accent-muted);
   color: var(--text-primary);
@@ -298,6 +316,14 @@ main {
   padding-left: 26px;
   cursor: pointer;
   white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+}
+
+.sidebar__item:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: -2px;
+  border-radius: 8px;
 }
 
 .sidebar__item::before {
