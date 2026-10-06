@@ -13,6 +13,7 @@
   <meta property="og:description" content="Portafolio de Fernando David Gómez Gutiérrez, Software Engineer orientado a backend y cloud.">
   <meta property="og:site_name" content="Fernando Gtz">
   <meta property="og:locale" content="es_MX">
+  <link rel="preload" href="assets/images/me.webp" as="image" type="image/webp" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -20,7 +21,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Saltar al contenido principal</a>
-  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
 <symbol id="i-ri-fullscreen-line" viewBox="0 0 24 24"><path fill="currentColor" d="M8 3V5H4V9H2V3H8ZM2 21V15H4V19H8V21H2ZM22 21H16V19H20V15H22V21ZM22 9H20V5H16V3H22V9Z"/></symbol>
 <symbol id="i-ri-shield-keyhole-line" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1L20.2169 2.82598C20.6745 2.92766 21 3.33347 21 3.80217V13.7889C21 15.795 19.9974 17.6684 18.3282 18.7812L12 23L5.6718 18.7812C4.00261 17.6684 3 15.795 3 13.7889V3.80217C3 3.33347 3.32553 2.92766 3.78307 2.82598L12 1ZM12 3.04879L5 4.60434V13.7889C5 15.1263 5.6684 16.3752 6.7812 17.1171L12 20.5963L17.2188 17.1171C18.3316 16.3752 19 15.1263 19 13.7889V4.60434L12 3.04879ZM12 7C13.1046 7 14 7.89543 14 9C14 9.73984 13.5983 10.3858 13.0011 10.7318L13 15H11L10.9999 10.7324C10.4022 10.3866 10 9.74025 10 9C10 7.89543 10.8954 7 12 7Z"/></symbol>
 <symbol id="i-ri-terminal-line" viewBox="0 0 24 24"><path fill="currentColor" d="M10.9999 12L3.92886 19.0711L2.51465 17.6569L8.1715 12L2.51465 6.34317L3.92886 4.92896L10.9999 12ZM10.9999 19H20.9999V21H10.9999V19Z"/></symbol>
@@ -143,7 +144,7 @@
     <!-- ===================== 02 · STACK ===================== -->
     <section id="stack" class="section">
       <div class="container">
-        <header class="section-head reveal">
+        <header class="section-head">
           <span class="section-head__index">02</span>
           <h2 class="section-head__title">Stack</h2>
         </header>
@@ -157,13 +158,13 @@
     <!-- ===================== 03 · EXPERIENCE ===================== -->
     <section id="experience" class="section">
       <div class="container">
-        <header class="section-head reveal">
+        <header class="section-head">
           <span class="section-head__index">03</span>
           <h2 class="section-head__title">Experiencia</h2>
         </header>
 
-        <div class="timeline">
-          <div class="timeline__entry reveal reveal--left">
+        <div class="timeline timeline--experience">
+          <div class="timeline__entry">
             <div class="timeline__marker">
               <img src="assets/images/experience/VLLN/logo/logo-villalon.png" alt="Logo de Villalón Engineering">
             </div>
@@ -171,19 +172,17 @@
               <h3 class="timeline__role">Desarrollador de Software — Prácticas Profesionales</h3>
               <p class="timeline__company">Villalón Engineering</p>
               <span class="timeline__period">Actualidad</span>
+              <p class="timeline__context">Contexto del proyecto</p>
               <ul class="timeline__bullets">
                 <li>Migración de código frontend de Angular v17 a Angular v22.</li>
                 <li>Rediseño de interfaces existentes dentro del framework VEX.</li>
                 <li>Análisis de compatibilidad de módulos existentes con la versión objetivo del framework.</li>
               </ul>
             </div>
+            <div class="evidence" data-evidence="vlln"></div>
           </div>
 
-          <div class="carousel reveal" id="experience-inline-gallery" style="--reveal-delay: 100ms" aria-label="Carrusel de experiencia">
-            <div class="carousel__track" id="experience-carousel-inline"></div>
-          </div>
-
-          <div class="timeline__entry reveal reveal--left" style="--reveal-delay: 120ms">
+          <div class="timeline__entry">
             <div class="timeline__marker">
               <img src="assets/images/experience/CEL/logo/logo-cel.png" alt="Logo del Centro de Lenguas UAEH">
             </div>
@@ -191,17 +190,15 @@
               <h3 class="timeline__role">Desarrollador y Tester Jr. — Servicio Social</h3>
               <p class="timeline__company">Centro de Lenguas — UAEH</p>
               <span class="timeline__period">Enero – Mayo 2026</span>
+              <p class="timeline__context">Contexto del proyecto</p>
               <ul class="timeline__bullets">
                 <li>Rediseño de interfaces para nueva versión del micrositio del Centro de Lenguas.</li>
                 <li>Apoyo en actividades de desarrollo y mantenimiento de software institucional.</li>
                 <li>Testing de aplicaciones en desarrollo y soporte técnico.</li>
               </ul>
             </div>
+            <div class="evidence" data-evidence="cel"></div>
           </div>
-        </div>
-
-        <div class="carousel reveal" id="experience-gallery" aria-label="Galería de experiencia">
-          <div class="carousel__track" id="experience-carousel"></div>
         </div>
       </div>
     </section>
@@ -209,7 +206,7 @@
     <!-- ===================== 04 · PROJECTS ===================== -->
     <section id="projects" class="section">
       <div class="container">
-        <header class="section-head reveal">
+        <header class="section-head">
           <span class="section-head__index">04</span>
           <h2 class="section-head__title">Proyectos</h2>
         </header>
@@ -276,12 +273,12 @@
     <!-- ===================== 05 · CERTIFICATIONS ===================== -->
     <section id="certifications" class="section">
       <div class="container">
-        <header class="section-head reveal">
+        <header class="section-head">
           <span class="section-head__index">05</span>
           <h2 class="section-head__title">Certificaciones</h2>
         </header>
 
-        <div class="cert reveal reveal--scale">
+        <div class="cert">
           <p class="cert__issuer">Amazon Web Services</p>
           <h3 class="cert__title">AWS Certified Cloud Practitioner</h3>
           <img class="cert__badge" src="assets/images/certs/image.png" alt="Insignia de AWS Certified Cloud Practitioner">
@@ -295,7 +292,7 @@
     <!-- ===================== 06 · EDUCATION ===================== -->
     <section id="education" class="section">
       <div class="container">
-        <header class="section-head reveal">
+        <header class="section-head">
           <span class="section-head__index">06</span>
           <h2 class="section-head__title">Educación</h2>
         </header>

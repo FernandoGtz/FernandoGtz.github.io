@@ -198,6 +198,7 @@ main {
   align-items: baseline;
   gap: 16px;
   margin-bottom: 48px;
+  --sh-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .section-head__index {
@@ -219,52 +220,152 @@ main {
 
 .section-head::after {
   content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
+  flex: 1 1 0;
+  min-width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--accent) 0, rgba(157, 78, 221, 0) 100%);
+  /*background: linear-gradient(to right, rgba(195, 195, 195, 0.5) 0%, rgba(157, 78, 221, 0) 100%);*/
+  /*box-shadow: 0 0 6px var(--accent-glow);*/
   align-self: center;
+  transform-origin: left;
+}
+
+/* Si el título deja a la línea sin espacio (pantallas estrechas), no se muestra. */
+.section-head.no-line::after {
+  display: none;
+}
+
+/* Coreografía del encabezado (número / título / línea), por dirección de scroll. */
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-ready .section-head__index {
+    opacity: 0;
+    transform: translateY(var(--sh-num-off, 6px));
+  }
+
+  html.reveal-ready .section-head__title {
+    opacity: 0;
+    transform: translateY(var(--sh-title-off, 14px));
+  }
+
+  html.reveal-ready .section-head::after {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* Dirección "arriba": se espejan el número y el título. La línea NO cambia:
+     siempre se forma de izquierda a derecha (y se borra al revés). */
+  html.reveal-ready .section-head.is-up {
+    --sh-num-off: -6px;
+    --sh-title-off: -14px;
+  }
+
+  /* Transiciones (desaceleración suave), distintas por dirección. */
+  html.reveal-transitions .section-head.is-down .section-head__index {
+    transition: opacity 350ms var(--sh-ease) 450ms,
+                transform 350ms var(--sh-ease) 450ms;
+  }
+  html.reveal-transitions .section-head.is-down .section-head__title {
+    transition: opacity 500ms var(--sh-ease) 200ms,
+                transform 500ms var(--sh-ease) 200ms;
+  }
+  html.reveal-transitions .section-head.is-down::after {
+    transition: transform 600ms var(--sh-ease) 0ms;
+  }
+
+  html.reveal-transitions .section-head.is-up .section-head__index {
+    transition: opacity 350ms var(--sh-ease) 0ms,
+                transform 350ms var(--sh-ease) 0ms;
+  }
+  html.reveal-transitions .section-head.is-up .section-head__title {
+    transition: opacity 500ms var(--sh-ease) 150ms,
+                transform 500ms var(--sh-ease) 150ms;
+  }
+  html.reveal-transitions .section-head.is-up::after {
+    transition: transform 550ms var(--sh-ease) 300ms;
+  }
+
+  /* Estado mostrado. */
+  html.reveal-ready .section-head.is-shown .section-head__index,
+  html.reveal-ready .section-head.is-shown .section-head__title {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  html.reveal-ready .section-head.is-shown::after {
+    transform: scaleX(1);
+  }
+
+  /* Armado: fija el estado inicial de la dirección sin transición. */
+  html.reveal-ready .section-head.reveal-no-anim .section-head__index,
+  html.reveal-ready .section-head.reveal-no-anim .section-head__title,
+  html.reveal-ready .section-head.reveal-no-anim::after {
+    transition: none;
+  }
 }
 
 /* ==========================================================================
-   Reveal (IntersectionObserver)
+   Reveal repetible (IntersectionObserver)
+   ---------------------------------------------------------------------------
+   Valores restaurados de la versión original:
+     translateY(32px) / translateX(±40px) / scale(0.95), 0.8s,
+     escalonado por `--reveal-delay`.
+   Se conservan las mejoras:
+   - Visible por defecto: sin JS no se oculta nada.
+   - El script añade `reveal-ready` para activar el estado oculto y
+     `reveal-transitions` para habilitar las transiciones una vez armado.
+   - `reveal-no-anim` muestra sin transición (saltos del sidebar).
    ========================================================================== */
 
 .reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  transition:
-    opacity var(--transition-slow),
-    transform var(--transition-slow);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-
-.reveal--left {
-  transform: translateX(-40px);
-}
-
-.reveal--right {
-  transform: translateX(40px);
-}
-
-.reveal--scale {
-  transform: scale(0.95);
-}
-
-.reveal.revealed {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
-.reveal--left.revealed {
-  transform: translateX(0);
-}
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-ready .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+  }
 
-.reveal--right.revealed {
-  transform: translateX(0);
-}
+  html.reveal-ready .reveal--left {
+    transform: translateX(-40px);
+  }
 
-.reveal--scale.revealed {
-  transform: scale(1);
+  html.reveal-ready .reveal--right {
+    transform: translateX(40px);
+  }
+
+  html.reveal-ready .reveal--scale {
+    transform: scale(0.95);
+  }
+
+  html.reveal-transitions .reveal {
+    transition:
+      opacity var(--transition-slow),
+      transform var(--transition-slow);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  html.reveal-ready .reveal.reveal-no-anim {
+    transition: none;
+  }
+
+  html.reveal-ready .reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  html.reveal-ready .reveal--left.revealed {
+    transform: translateX(0);
+  }
+
+  html.reveal-ready .reveal--right.revealed {
+    transform: translateX(0);
+  }
+
+  html.reveal-ready .reveal--scale.revealed {
+    transform: scale(1);
+  }
 }
 
 /* ==========================================================================
@@ -282,7 +383,6 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(9, 9, 15, 0.88);
   transition: width var(--transition-fast);
   overflow: hidden;
 }
@@ -391,7 +491,7 @@ main {
   align-items: center;
   background-image:
     linear-gradient(to right, var(--bg-primary) 35%, rgba(9, 9, 15, 0.55) 55%, rgba(9, 9, 15, 0.25) 100%),
-    url('assets/images/me.jpeg');
+    url('assets/images/me.webp');
   background-size: cover;
   background-position: right center;
   background-repeat: no-repeat;
@@ -712,24 +812,6 @@ main {
   background: linear-gradient(to left, var(--accent-glow), transparent);
 }
 
-#experience-gallery,
-#experience-inline-gallery {
-  width: 100vw;
-  margin-left: calc(50% - 50vw - var(--sidebar-w) / 2);
-  margin-right: calc(50% - 50vw - var(--sidebar-w) / 2);
-  overflow-x: clip;
-  overflow-y: visible;
-  touch-action: pan-y;
-}
-
-#experience-inline-gallery {
-  margin-bottom: 40px;
-}
-
-#experience .carousel__item:hover {
-  transform: scale(1.4);
-}
-
 .carousel__track {
   display: flex;
   width: max-content;
@@ -770,19 +852,278 @@ main {
   box-shadow: 0 0 0 1px var(--accent), 0 0 14px var(--accent-glow);
 }
 
-#experience-carousel .carousel__item {
-  width: 400px;
-  aspect-ratio: 2.13 / 1;
-}
-
-#experience-carousel-inline .carousel__item {
-  width: 400px;
-  aspect-ratio: 16 / 9;
-}
-
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+
+/* ==========================================================================
+   Experiencia — visor de evidencias
+   ========================================================================== */
+
+.timeline__context {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+/* Experiencia: rejilla de 2 columnas por empleo; el visor ocupa ambas. */
+.timeline--experience .timeline__entry {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  column-gap: 60px;
+  row-gap: 24px;
+  padding-left: 0;
+}
+
+.timeline--experience .timeline__marker {
+  position: static;
+  width: auto;
+  grid-column: 1;
+  grid-row: 1;
+  align-items: flex-start;
+}
+
+.timeline--experience .timeline__content {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.timeline--experience .evidence {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+/* Entrada/salida por visibilidad (la clase `is-shown` la pone el JS).
+   Fila: izquierda -> derecha al entrar, centro -> izquierda al salir.
+   Visor: derecha -> izquierda al entrar, centro -> derecha al salir. */
+.timeline--experience {
+  --exp-row-travel: 120px;
+  --exp-ev-travel: 120px;
+}
+
+html.reveal-ready .timeline--experience .timeline__marker,
+html.reveal-ready .timeline--experience .timeline__content {
+  transform: translateX(calc(-1 * var(--exp-row-travel)));
+}
+
+html.reveal-ready .timeline--experience .evidence {
+  transform: translateX(var(--exp-ev-travel));
+}
+
+html.reveal-transitions .timeline--experience .timeline__marker,
+html.reveal-transitions .timeline--experience .timeline__content,
+html.reveal-transitions .timeline--experience .evidence {
+  transition: transform var(--transition-slow);
+  will-change: transform;
+}
+
+html.reveal-ready .timeline--experience .timeline__entry.is-shown .timeline__marker,
+html.reveal-ready .timeline--experience .timeline__entry.is-shown .timeline__content,
+html.reveal-ready .timeline--experience .timeline__entry.is-shown .evidence {
+  transform: translateX(0);
+}
+
+.evidence {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.evidence__main {
+  grid-column: 1;
+  grid-row: 1;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.evidence__stage {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg-surface);
+}
+
+.evidence__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 350ms ease;
+}
+
+.evidence__img.is-active {
+  opacity: 1;
+}
+
+.evidence__img.is-missing {
+  opacity: 0;
+}
+
+.evidence__badge {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(9, 9, 15, 0.82);
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.evidence__meta {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.evidence__caption {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: evidence-fade 350ms ease both;
+}
+
+.evidence__counter {
+  flex: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.evidence__pause {
+  flex: none;
+  border: none;
+  background: none;
+  padding: 4px 2px;
+  color: var(--text-accent);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.evidence__thumbs {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.evidence__thumb {
+  min-width: 0;
+  padding: 0;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: border-color 200ms ease;
+}
+
+.evidence__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.evidence__thumb img.is-missing {
+  opacity: 0;
+}
+
+.evidence__thumb:hover {
+  border-color: var(--accent);
+}
+
+.evidence__main:focus-visible,
+.evidence__thumb:focus-visible,
+.evidence__pause:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.evidence__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes evidence-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightbox__caption {
+  display: block;
+  margin-top: 12px;
+  text-align: center;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .timeline--experience {
+    --exp-row-travel: 0px;
+    --exp-ev-travel: 0px;
+  }
+
+  .timeline--experience .timeline__entry {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 48px;
+  }
+
+  .timeline--experience .timeline__content {
+    grid-column: 1;
+  }
+
+  .evidence {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .evidence__main {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .evidence__thumbs {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .evidence__meta {
+    grid-column: 1;
+    grid-row: 3;
+  }
 }
 
 /* ==========================================================================
@@ -994,7 +1335,7 @@ main {
   background: rgba(9, 9, 15, 0.18);
 }
 
-.project-card__media .expand-hint {
+.expand-hint {
   position: absolute;
   top: 12px;
   right: 12px;
@@ -1009,12 +1350,38 @@ main {
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  opacity: 0;
-  transition: opacity var(--transition-fast);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
-.project-card__media:hover .expand-hint {
-  opacity: 1;
+.project-card__media:hover .expand-hint,
+.evidence__main:hover .expand-hint,
+.evidence__main:focus-visible .expand-hint {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Barra de progreso del cambio automático de la imagen principal. */
+.media-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 3;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: media-bar-fill var(--media-bar-dur, 3000ms) linear forwards;
+}
+
+@keyframes media-bar-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-bar { display: none; }
 }
 
 /* Bullets */
@@ -1285,6 +1652,7 @@ main {
   border-radius: 22px;
   padding: 40px 32px;
   text-align: center;
+  will-change: transform, opacity;
 }
 
 .cert__issuer {
@@ -1350,8 +1718,6 @@ main {
   padding: 20px;
   pointer-events: none;
   margin-right: 12px;
-  background: rgba(9, 9, 15, 0.88);
-  border-radius: 14px;
 }
 
 .contact-rail__line {
@@ -1478,7 +1844,7 @@ main {
     top: 56px;
     left: 0;
     right: 0;
-    background: rgba(9, 9, 15, 0.88);
+    background: linear-gradient(to right, var(--bg-surface) 0%, rgba(17, 17, 40, 0) 100%);
     border-bottom: 1px solid var(--border);
     padding-top: 0;
     transform: translateY(-8px);
@@ -1519,7 +1885,7 @@ main {
     justify-content: center;
     gap: 24px;
     padding: 14px 16px;
-    background: rgba(9, 9, 15, 0.88);
+    background: linear-gradient(to top, var(--bg-card) 0%, rgba(22, 22, 42, 0.7) 70%, rgba(22, 22, 42, 0) 100%);
   }
 
   .contact-rail__line {
@@ -1542,22 +1908,7 @@ main {
     width: 220px;
   }
 
-  #experience-carousel .carousel__item,
-  #experience-carousel-inline .carousel__item {
-    width: 320px;
-  }
-
-  #experience-gallery,
-#experience-inline-gallery {
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-  }
-
   .carousel__item:hover {
-    transform: none;
-  }
-
-  #experience .carousel__item:hover {
     transform: none;
   }
 
@@ -1897,6 +2248,27 @@ main {
 .timeline--education .timeline__marker img {
   max-width: 90px;
   max-height: 90px;
+}
+
+/* Línea vertical de Educación: crece de arriba a abajo al entrar y se retrae
+   de abajo hacia arriba al salir. Visible por defecto (sin JS / movimiento
+   reducido). */
+.timeline--education::before {
+  transform-origin: top center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-ready .timeline--education::before {
+    transform: scaleY(0);
+  }
+
+  html.reveal-transitions .timeline--education::before {
+    transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html.reveal-ready .timeline--education.is-shown::before {
+    transform: scaleY(1);
+  }
 }
 
 .languages {
