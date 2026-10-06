@@ -1492,10 +1492,10 @@ html.reveal-ready .timeline--experience .timeline__entry.is-shown .evidence {
   );
 }
 
-.project-card--antropos .project-card__media {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent), 0 0 24px var(--accent-glow);
-}
+/*.project-card--antropos .project-card__media {*/
+/*  border-color: var(--accent);*/
+/*  box-shadow: 0 0 0 1px var(--accent), 0 0 24px var(--accent-glow);*/
+/*}*/
 
 .project-card .carousel {
   overflow: visible;
